@@ -1,0 +1,11 @@
+/* Reset and basic body styling */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #6b73ff, #000dff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

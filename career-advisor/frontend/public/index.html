@@ -1,43 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Advisor</title>
+  <style>
+    /* Reset some default styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: #fff;
+    }
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      padding: 20px;
+    }
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 30px 40px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      text-align: center;
+    }
+
+    .card h2 {
+      margin-bottom: 10px;
+      font-size: 2rem;
+    }
+
+    .card p {
+      margin-bottom: 20px;
+      font-size: 1rem;
+      color: #e0e0e0;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      resize: none;
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    .glossy-btn {
+      background: linear-gradient(145deg, #ff8c00, #ffd700);
+      border: none;
+      border-radius: 50px;
+      padding: 12px 25px;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+    }
+
+    .glossy-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.2);
+      min-height: 50px;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h2>Career Advisor</h2>
+      <p>Enter your query below and get expert advice!</p>
+      <textarea id="userInput" placeholder="Type your career question..."></textarea>
+      <button class="glossy-btn" id="getAdviceBtn">Get Advice</button>
+      <div class="result" id="adviceResult"></div>
+    </div>
+  </div>
+
+  <script>
+    const btn = document.getElementById('getAdviceBtn');
+    const result = document.getElementById('adviceResult');
+    const input = document.getElementById('userInput');
+
+    btn.addEventListener('click', async () => {
+      const userInput = input.value.trim();
+      if (!userInput) return alert('Please type something!');
+      result.textContent = 'Fetching advice...';
+
+      try {
+        const response = await fetch('http://localhost:5000/api/advice', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userInput })
+        });
+
+        const data = await response.json();
+        result.textContent = data.advice || 'No advice returned.';
+      } catch (err) {
+        result.textContent = 'Error fetching advice.';
+        console.error(err);
+      }
+    });
+  </script>
+</body>
 </html>
